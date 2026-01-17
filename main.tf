@@ -158,7 +158,7 @@ resource "aws_autoscaling_group" "main" {
   }
 
   instance_refresh {
-    strategy = "rolling"
+    strategy = "Rolling"
     preferences {
       min_healthy_percentage = 50
     }
