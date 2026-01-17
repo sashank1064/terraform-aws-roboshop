@@ -4,8 +4,6 @@ locals {
 
   private_subnet_ids = split("," ,data.aws_ssm_parameter.private_subnet_ids.value)[0]
   private_subnet_id = split("," ,data.aws_ssm_parameter.private_subnet_ids.value)
-
-  catalogue_sg_id = data.aws_ssm_parameter.catalogue_sg_id.value
   
   backend_alb_listener_arn = data.aws_ssm_parameter.backend_alb_listener_arn.value
   frontend_alb_listener_arn = data.aws_ssm_parameter.frontend_alb_listener_arn.value
