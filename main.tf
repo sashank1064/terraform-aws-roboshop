@@ -5,16 +5,26 @@ resource "aws_lb_target_group" "main" {
   vpc_id   = local.vpc_id
   deregistration_delay = 120
 
+  # health_check {
+  #   healthy_threshold = 2
+  #   interval = 5
+  #   matcher = "200-299"
+  #   path = local.health_check_path
+  #   port = local.tg_port
+  #   protocol = "HTTP"
+  #   timeout = 2
+  #   unhealthy_threshold = 3
+  # }
   health_check {
-    healthy_threshold = 2
-    interval = 5
-    matcher = "200-299"
-    path = local.health_check_path
-    port = local.tg_port
-    protocol = "HTTP"
-    timeout = 2
-    unhealthy_threshold = 3
-  }
+  healthy_threshold   = 2
+  unhealthy_threshold = 5
+  interval            = 15
+  timeout             = 5
+  matcher             = "200-299"
+  path                = local.health_check_path
+  port                = local.tg_port
+  protocol            = "HTTP"
+}
 }
 
 resource "aws_instance" "main" {
@@ -136,7 +146,7 @@ resource "aws_autoscaling_group" "main" {
   vpc_zone_identifier       = local.private_subnet_id
   target_group_arns         = [aws_lb_target_group.main.arn]
   health_check_type         = "ELB"
-  health_check_grace_period = 90
+  health_check_grace_period = 300
   
   launch_template {
     id      = aws_launch_template.main.id
